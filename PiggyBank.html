@@ -1,102 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kids Savings Tracker</title>
-    <script>
-      let totalSavings = 0;
-      let savingsGoal = 100;
-      let transactions = [];
 
-      let categories = {
-        toys: 0,
-        candy: 0,
-        savings: 0,
-      };
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kids Savings Tracker</title>
+  <script>
+    let totalSavings = 0;
+    let savingsGoal = 100;
+    let transactions = [];
 
-      function handleLogin() {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
+    let categories = {
+      toys: 0,
+      candy: 0,
+      savings: 0,
+    };
 
-        if (username && password) {
-          document.getElementById("loginForm").style.display = "none";
-          document.getElementById("savingsTracker").style.display = "block";
-        } else {
-          alert("Please enter both username and password.");
-        }
+    function handleLogin() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (username && password) {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("savingsTracker").style.display = "block";
+      } else {
+        alert("Please enter both username and password.");
       }
+    }
 
-      function addAllowance() {
-        const allowance = parseFloat(
-          document.getElementById("allowance").value
-        );
-        const category = document.getElementById("accountSelector").value;
+    function addAllowance() {
+      const allowance = parseFloat(
+        document.getElementById("allowance").value
+      );
+      const category = document.getElementById("accountSelector").value;
 
-        if (!isNaN(allowance) && allowance > 0) {
-          categories[category] += allowance;
-          totalSavings += allowance;
-          recordTransaction("deposit", allowance, category);
-          document.getElementById("allowance").value = "";
-          updateCategoryTotals();
-        } else {
-          alert("Please enter a valid number.");
-        }
+      if (!isNaN(allowance) && allowance > 0) {
+        categories[category] += allowance;
+        totalSavings += allowance;
+        recordTransaction("deposit", allowance, category);
+        document.getElementById("allowance").value = "";
+        updateCategoryTotals();
+      } else {
+        alert("Please enter a valid number.");
       }
+    }
 
-      function spendMoney(category) {
-        const amount = parseFloat(prompt("How much would you like to spend?"));
+    function spendMoney(category) {
+      const amount = parseInt(document.getElementById("spend" + category).value);
+      document.getElementById("spend" + category).value = ''
 
-        if (!isNaN(amount) && amount > 0 && categories[category] >= amount) {
-          categories[category] -= amount;
-          totalSavings -= amount;
-          recordTransaction("purchase", amount, category);
-          updateCategoryTotals();
-        } else {
-          alert("Invalid amount or insufficient funds.");
-        }
+      if (!isNaN(amount) && amount > 0 && categories[category] >= amount) {
+        categories[category] -= amount;
+        totalSavings -= amount;
+        recordTransaction("purchase", amount, category);
+        updateCategoryTotals();
+      } else {
+        alert("Invalid amount or insufficient funds.");
       }
+    }
 
-      function updateCategoryTotals() {
-        document.getElementById("toysTotal").innerText =
-          categories.toys.toFixed(2);
-        document.getElementById("candyTotal").innerText =
-          categories.candy.toFixed(2);
-        document.getElementById("savingsTotal").innerText =
-          categories.savings.toFixed(2);
-        document.getElementById("totalSavings").innerText =
-          totalSavings.toFixed(2);
-        updateSavingsBar();
-        renderTransactionTable();
-      }
+    function updateCategoryTotals() {
+      document.getElementById("toysTotal").innerText =
+        categories.toys.toFixed(2);
+      document.getElementById("candyTotal").innerText =
+        categories.candy.toFixed(2);
+      document.getElementById("savingsTotal").innerText =
+        categories.savings.toFixed(2);
+      document.getElementById("totalSavings").innerText =
+        totalSavings.toFixed(2);
+      updateSavingsBar();
+      renderTransactionTable();
+    }
 
-      function recordTransaction(type, amount, category) {
-        const date = new Date().toLocaleDateString();
-        transactions.push({
-          date,
-          type,
-          amount,
-          category,
-          balance: totalSavings,
-        });
+    function recordTransaction(type, amount, category) {
+      const date = new Date().toLocaleDateString();
+      transactions.push({
+        date,
+        type,
+        amount,
+        category,
+        balance: totalSavings,
+      });
 
-        renderTransactionTable();
-      }
+      renderTransactionTable();
+    }
 
-      function updateSavingsBar() {
-        const savingsBar = document.getElementById("savingsBar");
-        const progress = Math.min((totalSavings / savingsGoal) * 100, 100);
-        savingsBar.style.width = progress + "%";
-        savingsBar.innerText = progress.toFixed(2) + "%";
-      }
+    function updateSavingsBar() {
+      const savingsBar = document.getElementById("savingsBar");
+      const progress = Math.min((totalSavings / savingsGoal) * 100, 100);
+      savingsBar.style.width = progress + "%";
+      savingsBar.innerText = progress.toFixed(2) + "%";
+    }
 
-      function renderTransactionTable() {
-        const tableBody = document.getElementById("transactionTableBody");
-        tableBody.innerHTML = "";
+    function renderTransactionTable() {
+      const tableBody = document.getElementById("transactionTableBody");
+      tableBody.innerHTML = "";
 
-        transactions.forEach((transaction, index) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
+      transactions.forEach((transaction, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
                     <td>${transaction.date}</td>
                     <td>${transaction.category}</td>
                     <td style="color: ${
@@ -104,127 +106,246 @@
                     };">$${transaction.amount.toFixed(2)}</td>
                     <td>$${transaction.balance.toFixed(2)}</td>
                 `;
-          tableBody.appendChild(row);
-        });
-      }
+        tableBody.appendChild(row);
+      });
+    }
 
-      window.onload = function () {
-        document.getElementById("goal").innerText =
-          "Goal: $" + savingsGoal.toFixed(2);
-        document.getElementById("totalSavings").innerText =
-          totalSavings.toFixed(2);
-        updateSavingsBar();
-        document.getElementById("savingsTracker").style.display = "none";
-        updateCategoryTotals();
-      };
-    </script>
-    <style>
-      body {
-        background-color: #ffc0cb;
-      }
-      #savingsTracker {
-        max-width: 600px;
-        margin: auto;
-      }
-      #savingsProgressBar {
-        background-color: #ddd;
-        border-radius: 5px;
-      }
-      #savingsBar {
-        text-align: center;
-        padding: 10px;
-        color: white;
-        background-color: #4caf50;
-        border-radius: 5px;
-        width: 0;
-      }
-      h1 {
-        text-align: center;
-        font-size: 2.5em;
-      }
-      table {
-        width: 100%;
-        margin-top: 20px;
-        border-collapse: collapse;
-        background-color: #f2f2f2;
-      }
-      th,
-      td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-      }
-      #loginForm {
-        display: flex;
-        flex-direction: column;
-        max-width: 200px;
-        margin: auto;
-        margin-top: 50px;
-      }
-      #categories div {
-        border: 1px solid #000;
-        margin-bottom: 15px;
-        padding: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="loginForm">
-      <input type="text" id="username" placeholder="Username" />
-      <input type="password" id="password" placeholder="Password" />
-      <button onclick="handleLogin()">Login</button>
-    </div>
+    window.onload = function () {
+      document.getElementById("goal").innerText =
+        "Goal: $" + savingsGoal.toFixed(2);
+      document.getElementById("totalSavings").innerText =
+        totalSavings.toFixed(2);
+      updateSavingsBar();
+      document.getElementById("savingsTracker").style.display = "none";
+      updateCategoryTotals();
+    };
+  </script>
+  <style>
+    body {
+      background-color: #fbd7dd;
+      color: #4a4a4a;
+      font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    }
 
-    <div id="savingsTracker">
-      <h1>Kids Savings Tracker</h1>
+    input,
+    select {
+      box-shadow: none;
+      width: 3rem;
+      height: 1.5rem;
+      padding: 5px 6px;
+      background: #fff;
+      border: 2px solid #f897a7;
+      font: 1.6rem;
+      border-radius: 10px;
+    }
+
+    #savingsTracker {
+      max-width: 80%;
+      margin: auto;
+    }
+
+    #savingsProgressBar {
+      background-color: #ffffff;
+      border-radius: 5px;
+      max-width: 60%;
+    }
+
+    #savingsBar {
+      text-align: center;
+      padding: 10px;
+      color: #212121;
+      background-color: #4caf50;
+      border-radius: 5px;
+      width: 0;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5em;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+      background-color: #f2f2f2;
+    }
+
+    th {
+      background-color: #f897a7;
+      color: white;
+    }
+
+    tr:hover {
+      color: white;
+      background-color: #ffc0cb;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    #loginForm {
+      display: flex;
+      flex-direction: column;
+      max-width: 30%;
+      margin: auto;
+      margin-top: 50px;
+    }
+
+    #categories {
+      display: grid;
+      grid-gap: 1rem;
+    }
+
+    .category {
+      border: 5px solid #f897a7;
+      border-radius: 2rem;
+      margin-bottom: 15px;
+      padding: 10px;
+    }
+
+    .button {
+      background: #f897a7;
+      border: 1px solid #f897a7;
+      border-radius: 6px;
+      box-shadow: rgba(0, 0, 0, 0.1) 1px 2px 4px;
+      box-sizing: border-box;
+      color: #FFFFFF;
+      cursor: pointer;
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 900;
+      min-height: 2rem;
+      outline: 0;
+      text-align: center;
+      text-rendering: geometricprecision;
+      text-transform: none;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      vertical-align: middle;
+    }
+
+    .button:hover,
+    .button:active {
+      background-color: initial;
+      background-position: 0 0;
+      color: #ff8b9e;
+    }
+
+    .button:active {
+      opacity: .5;
+    }
+
+    .flex {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .subhead {
+      font-size: 24px;
+    }
+
+    label {
+      font-size: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="flex" style="gap:.5rem; width:50%" id="loginForm">
+    <h1 style="color:#ff8b9e">PIGGY BANK</h1>
+    <img src="nose.svg" height="400px" width="400px">
+    <input style="width:100%;" type="text" id="username" placeholder="Username" />
+    <input style="width:100%;" type="password" id="password" placeholder="Password" />
+    <button class="button" style="width:100%; align-self: center;" onclick="handleLogin()">Login</button>
+  </div>
+
+  <div id="savingsTracker">
+    <h1>Kids Savings Tracker</h1>
+    <div class="flex" style="margin-bottom: 2rem;">
       <div>
         <label for="allowance">Add Allowance:</label>
         <input type="number" id="allowance" />
-        <select id="accountSelector">
+        <select style="width:8rem; height:2.3rem;" id="accountSelector">
           <option value="toys">Toys</option>
           <option value="candy">Candy</option>
           <option value="savings">Savings</option>
         </select>
-        <button onclick="addAllowance()">Add</button>
       </div>
+      <div>
+        <button class="button" onclick="addAllowance()">Add</button>
+      </div>
+    </div>
 
-      <div id="savingsProgress">
-        <label id="goal"></label>
-        <div id="savingsProgressBar">
+    <div id="savingsProgress">
+      <label class="flex subhead" id="goal"></label>
+      <div class="flex" style="width:100%">
+        <div id="savingsProgressBar" style="width:100%">
           <div id="savingsBar">0%</div>
         </div>
-        <p>Total Savings: $<span id="totalSavings">0</span></p>
       </div>
-
-      <div id="categories">
-        <div id="toys">
-          <h2>Toys: $<span id="toysTotal">0</span></h2>
-          <button onclick="spendMoney('toys')">Spend</button>
-        </div>
-        <div id="candy">
-          <h2>Candy: $<span id="candyTotal">0</span></h2>
-          <button onclick="spendMoney('candy')">Spend</button>
-        </div>
-        <div id="savings">
-          <h2>Savings: $<span id="savingsTotal">0</span></h2>
-          <button onclick="spendMoney('savings')">Spend</button>
-        </div>
+      <div class="flex">
+        <p class="subhead" style="margin-bottom: 5rem;">Total Savings: $<span id="totalSavings">0</span></p>
       </div>
-
-      <h2>Transaction History</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Balance</th>
-          </tr>
-        </thead>
-        <tbody id="transactionTableBody">
-          <!-- Transactions table is rendered here -->
-        </tbody>
-      </table>
     </div>
-  </body>
+
+    <div id="categories">
+      <div style="grid-column: 1;" class="category" id="toys">
+        <div class="flex">
+          <h2>Toys: $<span id="toysTotal">0</span></h2>
+        </div>
+        <div class="flex">
+          <label>Amount:</label>
+          <input id="spendtoys" type="number" step=".01">
+          <button class="button" onclick="spendMoney('toys')">Spend</button>
+        </div>
+      </div>
+      <div style="grid-column: 2;" class="category" id="candy">
+        <div class="flex">
+          <h2>Candy: $<span id="candyTotal">0</span></h2>
+        </div>
+        <div class="flex">
+          <label>Amount:</label>
+          <input id="spendcandy" type="number" step=".01">
+          <button class="button" onclick="spendMoney('candy')">Spend</button>
+        </div>
+      </div>
+      <div style="grid-column: 3;" class="category" id="savings">
+        <div class="flex">
+          <h2>Savings: $<span id="savingsTotal">0</span></h2>
+        </div>
+        <div class="flex">
+          <label>Amount:</label>
+          <input id="spendsavings" type="number" step=".01">
+          <button class="button" onclick="spendMoney('savings')">Spend</button>
+        </div>
+      </div>
+    </div>
+
+    <h2>Transaction History</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Balance</th>
+        </tr>
+      </thead>
+      <tbody id="transactionTableBody">
+        <!-- Transactions table is rendered here -->
+      </tbody>
+    </table>
+  </div>
+</body>
+
 </html>
