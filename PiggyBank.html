@@ -43,6 +43,10 @@
       } else {
         alert("Please enter a valid number.");
       }
+      document.getElementById("coin").classList.add("geo-money");
+      setTimeout(function () {
+        document.getElementById("coin").classList.remove("geo-money");
+      }, 1000);
     }
 
     function spendMoney(category) {
@@ -110,6 +114,16 @@
       });
     }
 
+    function changeBackground() {
+      if (document.getElementById("body").classList.contains("pink")) {
+        document.getElementById("body").classList.remove("pink");
+        document.getElementById("body").classList.add("flames");
+      } else if (document.getElementById("body").classList.contains("flames")) {
+        document.getElementById("body").classList.remove("flames");
+        document.getElementById("body").classList.add("pink");
+      }
+    }
+
     window.onload = function () {
       document.getElementById("goal").innerText =
         "Goal: $" + savingsGoal.toFixed(2);
@@ -122,9 +136,16 @@
   </script>
   <style>
     body {
-      background-color: #fbd7dd;
       color: #4a4a4a;
       font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    }
+
+    .pink {
+      background-color: #fbd7dd;
+    }
+
+    .flames {
+      background-color: red;
     }
 
     input,
@@ -257,10 +278,41 @@
     label {
       font-size: 20px;
     }
+
+    .geo-money {
+      opacity: 0;
+      fill: #F2A359;
+      animation: bounce 1.5s forwards;
+      transform-origin: 50% 50%;
+    }
+
+    svg {
+      width: 200px;
+      fill: white;
+    }
+
+    /* Propriété */
+    @keyframes bounce {
+      0% {
+        transform: translateY(0) rotateX(0deg);
+      }
+
+
+      50% {
+        transform: translateY(-24px) rotateX(380deg);
+        opacity: 1;
+      }
+
+
+      100% {
+        transform: translateY(0) rotateX(0deg);
+
+      }
+    }
   </style>
 </head>
 
-<body>
+<body id="body" class="pink">
   <div class="flex" style="gap:.5rem; width:50%" id="loginForm">
     <h1 style="color:#ff8b9e">PIGGY BANK</h1>
     <img src="nose.svg" height="400px" width="400px">
@@ -271,6 +323,45 @@
 
   <div id="savingsTracker">
     <h1>Kids Savings Tracker</h1>
+    <div class="flex">
+      <svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 -6 50 50">
+        <defs>
+          <style>
+            .cls-1 {
+              fill: pink;
+              stroke: pink;
+              stroke-miterlimit: 10;
+            }
+
+            .cls-2 {
+              fill: #fff;
+            }
+          </style>
+        </defs>
+        <title>piggybank</title>
+
+        <g id="coin">
+          <path
+            d="M28,30.45A5.45,5.45,0,1,0,22.55,25,5.46,5.46,0,0,0,28,30.45Zm0-10.1A4.65,4.65,0,1,1,23.35,25,4.66,4.66,0,0,1,28,20.35Z" />
+          <path
+            d="M28.63,22.43a1.81,1.81,0,0,1,1.81,1.81.55.55,0,1,0,1.11,0,2.92,2.92,0,0,0-2.91-2.91.55.55,0,1,0,0,1.11Z" />
+        </g>
+
+
+        <path class="cls-1"
+          d="M45.39,24.33c0-8.3-8.24-15-18.41-15a21.53,21.53,0,0,0-9.42,2.11,6.25,6.25,0,0,0-.58-.68A6.17,6.17,0,0,0,9.69,9.66a1.41,1.41,0,0,0-.28,2.23l2.17,2.17a1.41,1.41,0,0,1,.1,1.89A14.23,14.23,0,0,0,9.74,19a1.39,1.39,0,0,1-1.25.83H5.58A1.23,1.23,0,0,0,4.35,21.1v6.82a1.26,1.26,0,0,0,1.26,1.26H8.78a1.21,1.21,0,0,1,1.08.7,15.29,15.29,0,0,0,4.36,5.29,1.42,1.42,0,0,1,.5,1.53l-1.46,4.71A1.22,1.22,0,0,0,14.43,43h5.13a1.74,1.74,0,0,0,1.66-1.22l.51-1.66a1.47,1.47,0,0,1,1.63-1,22.66,22.66,0,0,0,7.13,0,1.4,1.4,0,0,1,1.54,1l.58,1.86A1.5,1.5,0,0,0,34,43h5.43a1.12,1.12,0,0,0,1.07-1.46l-1.47-4.74a1.36,1.36,0,0,1,.5-1.48,13.89,13.89,0,0,0,5.83-11Zm0,0" />
+
+        <path
+          d="M37.65,17.67a.85.85,0,0,1-.54-.19,15.33,15.33,0,0,0-5.94-3,.85.85,0,0,1,.42-1.65,17,17,0,0,1,6.6,3.29.85.85,0,0,1-.54,1.51Zm0,0" />
+
+        <path
+          d="M22.47,14.49a.85.85,0,0,1-.2-1.68,19.29,19.29,0,0,1,4.55-.54.85.85,0,0,1,0,1.7,17.59,17.59,0,0,0-4.15.49l-.2,0Zm0,0" />
+
+        <path d="M14.68,18.43a1.1,1.1,0,1,0,1.1,1.1,1.1,1.1,0,0,0-1.1-1.1Zm0,0" />
+        <rect class="cls-2" x="13.71" y="18.44" width="0.94" height="0.94" rx="0.47" ry="0.47" />
+
+      </svg>
+    </div>
     <div class="flex" style="margin-bottom: 2rem;">
       <div>
         <label for="allowance">Add Allowance:</label>
@@ -346,6 +437,7 @@
       </tbody>
     </table>
   </div>
+  <button onclick="changeBackground()">boy mode</button>
 </body>
 
 </html>
